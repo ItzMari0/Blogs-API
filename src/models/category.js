@@ -8,5 +8,13 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
     underscored: true,
   });
+
+  category.associate = (models) => {
+    category.hasMany(models.PostCategories, {
+    as: 'postCategories',
+    foreignKey: 'category_id',
+    })
+  };
+
   return category;
 };
