@@ -11,6 +11,8 @@ const getUser = async (email, password) => {
 };
 
 const createUser = async ({ displayName, email, password, image }) => {
+  const sameEmail = await User.findOne({ where: { email } });
+  if (sameEmail) return { type: 409, message: 'User already registered' };
   const user = await User.create({ displayName, email, password, image });
   const { password: _, ...userWithoutPassword } = user.dataValues;
   const token = tokenGenerator(userWithoutPassword);
