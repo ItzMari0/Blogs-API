@@ -1,16 +1,12 @@
-// const { User } = require('../models');
+const { User } = require('../models');
 
-// const createUser = async ({ email, password }) => {
-//   const user = await User.create({ email, password });
-//   return user;
-// };
+const getUser = async (email) => {
+  const users = await User.findAll();
+  const result = users.find((user) => user.email === email);
+  if (!result) return false;
+  return result;
+};
 
-// const getUser = async (email) => {
-//   const user = User.findOne({ where: { email } });
-//   return user;
-// };
-
-// module.exports = {
-//   createUser,
-//   getUser,
-// };
+module.exports = {
+  getUser,
+};
