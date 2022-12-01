@@ -10,6 +10,14 @@ const getUser = async (email, password) => {
   return { result: userWithoutPassword, token };
 };
 
+const createUser = async ({ displayName, email, password, image }) => {
+  const user = await User.create({ displayName, email, password, image });
+  const { password: _, ...userWithoutPassword } = user.dataValues;
+  const token = tokenGenerator(userWithoutPassword);
+  return { result: userWithoutPassword, token };
+};
+
 module.exports = {
   getUser,
+  createUser,
 };
