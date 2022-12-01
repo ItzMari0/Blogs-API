@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const postCategory = sequelize.define('PostCategories', {
+  const PostCategory = sequelize.define('PostCategory', {
     postId: DataTypes.INTEGER,
     categoryId: DataTypes.INTEGER,
   }, {
@@ -10,19 +10,20 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
   });
 
-  postCategory.associate = (models) => {
-    postCategory.belongsTo(models.BlogPosts, {
-      as: 'blogPosts',
-      foreignKey: 'post_id',
-    })
-  };
-
-  postCategory.associate = (models) => {
-    postCategory.belongsTo(models.Categories, {
-      as: 'categories',
+  PostCategory.associate = (models) => {
+    models.Category.belongsToMany(models.BlogPost, {
+      as: 'postId',
+      through: PostCategory,
       foreignKey: 'category_id',
+      otherKey: 'post_id',
+    });
+    models.BlogPost.belongsToMany(models.Category, {
+      as: 'categoryId',
+      through: PostCategory,
+      foreignKey: 'post_id',
+      otherKey: 'category_id',
     })
   };
 
-  return postCategory;
+  return PostCategory;
 };

@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const category = sequelize.define('Category', {
+  const Category = sequelize.define('Category', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -15,12 +15,12 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
   });
 
-  category.associate = (models) => {
-    category.hasMany(models.PostCategories, {
+  Category.associate = (models) => {
+    Category.hasMany(models.PostCategory, {
     as: 'postCategories',
     foreignKey: 'category_id',
     })
   };
 
-  return category;
+  return Category;
 };

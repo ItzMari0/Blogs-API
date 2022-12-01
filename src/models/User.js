@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const user = sequelize.define('User', {
+  const User = sequelize.define('User', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -19,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
   });
 
-  user.associate = (models) => {
-    user.hasMany(models.BlogPosts, {
+  User.associate = (models) => {
+    User.hasMany(models.BlogPost, {
       as: 'blogPosts',
       foreignKey: 'user_id',
     })
   };
-  return user;
+  return User;
 };
