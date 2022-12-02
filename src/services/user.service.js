@@ -1,7 +1,7 @@
 const { User } = require('../models');
 const { tokenGenerator } = require('../authorization/jwt');
 
-const getUser = async (email, password) => {
+const loginUser = async (email, password) => {
   const users = await User.findAll();
   const result = users.find((user) => user.email === email && user.password === password);
   if (!result) return false;
@@ -19,7 +19,16 @@ const createUser = async ({ displayName, email, password, image }) => {
   return { result: userWithoutPassword, token };
 };
 
+const getUsers = async () => {
+  const users = await User.findAll();
+  return users.map((user) => {
+    const { password: _, ...userWithoutPassword } = user.dataValues;
+    return userWithoutPassword;
+  });
+};
+
 module.exports = {
-  getUser,
+  loginUser,
   createUser,
+  getUsers,
 };
