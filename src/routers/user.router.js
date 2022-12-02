@@ -9,6 +9,7 @@ const validateToken = require('../middlewares/tokenValidation.middleware');
 const router = express.Router();
 
 router.get('/', validateToken, userController.getUsers);
+router.get('/:id', validateToken, userController.getUserById);
 router.post('/', validateDisplayName, validatePassword, validateEmail, userController.createUser);
 
 module.exports = router;
