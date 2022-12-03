@@ -19,7 +19,7 @@ const getPostById = async (id) => {
 
 const updatePost = async (id, title, content, userId) => {
   const verify = await BlogPost.findOne({ where: { id } });
-  if (verify.id !== userId) {
+  if (verify.userId !== userId) {
     return { type: 401, message: 'Unauthorized user' };
   }
   await BlogPost.update({ title, content }, { where: { id } });
@@ -27,8 +27,20 @@ const updatePost = async (id, title, content, userId) => {
   return post;
 };
 
+const deletePost = async (id, userId) => {
+  const post = await BlogPost.findByPk(id);
+  if (!post) return { type: 404, message: 'Post does not exist' };
+  const verify = await BlogPost.findOne({ where: { id } });
+  if (verify.userId !== userId) {
+    return { type: 401, message: 'Unauthorized user' };
+  }
+  await BlogPost.destroy({ where: { id } });
+  return { type: 204 };
+};
+
 module.exports = {
   getPosts,
   getPostById,
   updatePost,
+  deletePost,
 };
