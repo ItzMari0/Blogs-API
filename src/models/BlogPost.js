@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     title: DataTypes.STRING,
     content: DataTypes.STRING,
-    user_id: {
+    userId: {
       allowNull: false,
       type: DataTypes.INTEGER,
     },
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     // modelName: 'blogPost',
     tableName: 'blog_posts',
     timestamps: false,
-    underscored: false,
+    underscored: true,
   });
 
   BlogPost.associate = (models) => {
