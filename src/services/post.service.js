@@ -1,4 +1,4 @@
-const { BlogPost, User, Category } = require('../models');
+const { BlogPost, User, Category, PostCategory } = require('../models');
 
 const getPosts = async () => {
   const blogPosts = await BlogPost.findAll({ include: [
@@ -27,6 +27,22 @@ const updatePost = async (id, title, content, userId) => {
   return post;
 };
 
+const createPost = async ({ title, content, categoryIds, userId }) => {
+  const verify = await Promise.all(categoryIds.map(async (id) => {
+    const categories = await Category.findOne({ where: { id } });
+    return categories;
+  }));
+  if (verify.includes(null)) {
+    return { type: 400, message: 'one or more "categoryIds" not found' };
+  }
+  const newPost = await BlogPost.create({ title, content, categoryIds, userId });
+  const { id } = newPost.dataValues;
+  await Promise.all(categoryIds.map(async (categoryId) => {
+    await PostCategory.create({ postId: id, categoryId });
+  }));
+  return { type: null, message: newPost };
+};
+
 const deletePost = async (id, userId) => {
   const post = await BlogPost.findByPk(id);
   if (!post) return { type: 404, message: 'Post does not exist' };
@@ -42,5 +58,6 @@ module.exports = {
   getPosts,
   getPostById,
   updatePost,
+  createPost,
   deletePost,
 };

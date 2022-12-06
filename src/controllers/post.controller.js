@@ -23,6 +23,15 @@ const updatePost = async (req, res) => {
   return res.status(200).json(message);
 };
 
+const createPost = async (req, res) => {
+  const { title, content, categoryIds } = req.body;
+  const { authorization } = req.headers;
+  const userId = jwt.tokenDecode(authorization);
+  const { type, message } = await postService.createPost({ title, content, categoryIds, userId });
+  if (type) return res.status(type).json({ message });
+  return res.status(201).json(message);
+};
+
 const deletePost = async (req, res) => {
   const { id } = req.params;
   const { authorization } = req.headers;
@@ -36,5 +45,6 @@ module.exports = {
   getPosts,
   getPostById,
   updatePost,
+  createPost,
   deletePost,
 };
